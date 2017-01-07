@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ $# -ne 2 ]; then
+    echo -e "Requests a new certificate for a domain/domains"
+    echo -e "Usage: $(basename $0) <domain-name(s)> <email-address>"
+    echo -e "    domain-names\tComma separated list of domain names"
+    exit 1
+fi
+
+certbot certonly --standalone --preferred-challenges "http,dns" -d ${1//,/ -d } --email $2 --verbose --agree-tos
