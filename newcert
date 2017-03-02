@@ -3,7 +3,8 @@
 if [ $# -ne 2 ]; then
     echo -e "Requests a new certificate for a domain/domains"
     echo -e "Usage: $(basename $0) <domain-name(s)> <email-address>"
-    echo -e "    domain-names\tComma separated list of domain names"
+    echo -e "    domain-names\tComma separated list of domain names, every"
+    echo -e "                \domain after the first is added as a SAN"
     exit 1
 fi
 
