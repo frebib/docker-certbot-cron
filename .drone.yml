@@ -1,22 +1,12 @@
-services:
-  docker:
-    image: docker:dind
-    privileged: true
-
 pipeline:
   build:
-    image: docker
-    environment:
-      - DOCKER_HOST=tcp://docker:2375
-    commands:
-      - docker build -t frebib/certbot-cron . 
+    image: spritsail/docker-build
+    volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
+    repo: frebib/certbot-cron
 
   publish:
-    image: docker
-    secrets: [ DOCKER_USER, DOCKER_PASS ]
-    environment:
-      - DOCKER_HOST=tcp://docker:2375
-    commands:
-      - docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push frebib/certbot-cron
-
+    image: spritsail/docker-publish
+    when: { event: [ push, tag, deployment ] }
+    volumes: [ '/var/run/docker.sock:/var/run/docker.sock' ]
+    secrets: [ docker_username, docker_password, microbadger_token ]
+    repo: frebib/certbot-cron
